@@ -54,6 +54,6 @@ for numRowIdx in range(2, numRows + 1):
     row = list(map(lambda x: x.value, row))  # 把列的所有cell的摭取出來重組成list
     listSheets[idxSheet].append(row)
 
-# 寫入檔案
+# 寫入excel檔案
 wbOutPut.save(filename = f'{strOutPutFileName}.xlsx')
 
