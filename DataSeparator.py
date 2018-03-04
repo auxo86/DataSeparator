@@ -34,7 +34,7 @@ listSheets = list(map(lambda x: wbOutPut.create_sheet(x, 0), listDistinctCol))  
 # 寫入表頭
 font = Font(b=True, color="000000", size=28)  # 粗體, 28號字, 黑色
 al = Alignment(horizontal="center", vertical="center")  # 置中排列
-thin = Side(border_style="thin", color="000000")  # 沒有框
+thin = Side(border_style="thin", color="FFFFFF")  # 沒有框
 border = Border(top=thin, left=thin, right=thin, bottom=thin)
 
 for sheet in listSheets:
@@ -53,7 +53,7 @@ for item in listDistinctCol:  # 給字典塞入值，這個數字要用在sheet�
 for numRowIdx in range(2, numRows + 1):
     row = list(sheet_ranges[f'A{numRowIdx}:{idxLastCol}{numRowIdx}'][0])  # 把列讀進來
     idxSheet = dictSheetIndex[sheet_ranges[f'{cellDistinctCol.column}{numRowIdx}'].value]  # 根據要distinct的目標欄位的值，找出要寫入的sheet index
-    row = list(map(lambda x: x.value, row))  # 把列的所有cell的摭取出來重組成list
+    row = list(map(lambda x: x.value, row))  # 把列的所有cell的值取出來重組成list
     listSheets[idxSheet].append(row)
 
 # 寫入excel檔案
