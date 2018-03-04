@@ -22,16 +22,17 @@ strListTail = [
 
 # 樣式
 fontHead = Font(b=True, color="000000", size=28)  # 粗體, 28號字, 黑色
-fontTotalPrice = Font(b=True, color='000000', size=14)  # 粗體, 14號字, 紅色
+fontTotalPrice = Font(b=True, color='000000', size=14)  # 粗體, 14號字, 黑色
 fontTail = Font(b=False, color='000000', size=14)  #
 alHVCenter = Alignment(horizontal="center", vertical="center")  # 水平垂直置中排列
+alHCenter = Alignment(horizontal="center", vertical="bottom")  # 水平置中排列
 noborder = Side(border_style="thin", color="FFFFFF")  # 沒有框
 redThickBorder = Side(border_style='thick', color='FF0000')  # 紅粗框
 blackThickBorder = Side(border_style='thick', color='000000')  # 黑粗框
 grayThinBorder = Side(border_style='thin', color='969696')  # 灰細框
 borderHead = Border(top=noborder, left=noborder, right=noborder, bottom=noborder)
 borderColLists = Border(top=blackThickBorder, left=noborder, right=noborder, bottom=blackThickBorder)
-borderTotalPrice = Border(top=redThickBorder, left=redThickBorder, right=redThickBorder, bottom=redThickBorder)
+borderTotalPrice = Border(top=blackThickBorder, left=blackThickBorder, right=blackThickBorder, bottom=blackThickBorder)
 borderReportCell = Border(top=grayThinBorder, left=noborder, right=noborder, bottom=grayThinBorder)
 borderTail = Border(top=grayThinBorder, left=grayThinBorder, right=grayThinBorder, bottom=grayThinBorder)
 
@@ -98,8 +99,10 @@ for sheet in listSheets:
         for numColIdx in range(1,numColCount + 1):
             if numRowIdx == 4:
                 sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].border = borderColLists
+                sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].alignment = alHCenter
             else:
                 sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].border = borderReportCell
+                sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].alignment = alHCenter
     # 加表尾
     numTailLineIdx = 2
     for textLineInTail in strListTail:
