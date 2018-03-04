@@ -10,15 +10,7 @@ strDistinctCol = '牙醫診所'  # input('請輸入要建立分頁所依據的�
 strHeadText = '2017 年 11月 請 款 單'  # input('請輸入表頭文字：')
 strOutPutFileName = strFileName + '_output'
 strTotalPriceColName = '總價'
-strListTail = [
-    'PS:',
-    '一.資料若有錯誤，請立即通知歐美技工所',
-    '二.未寫技工單者,以收單日期填寫',
-    '三.9月份後請款單，以當月收單日期為主',
-    '四.107年1月部分產品調漲通知',
-    '五.新增請款單方式:郵寄，mail，line',
-    '\t\tmail:k62718@gmail.com',
-    '\t\tline ID:0953162482']
+strTail = 'PS:\r\n一.資料若有錯誤，請立即通知歐美技工所\r\n二.未寫技工單者,以收單日期填寫\r\n三.9月份後請款單，以當月收單日期為主\r\n四.107年1月部分產品調漲通知\r\n五.新增請款單方式:郵寄，mail，line\r\n\t\tmail:k62718@gmail.com\r\n\t\tline ID:0953162482'
 
 # 樣式
 fontHead = Font(b=True, color="000000", size=28)  # 粗體, 28號字, 黑色
@@ -26,6 +18,7 @@ fontTotalPrice = Font(b=True, color='000000', size=14)  # 粗體, 14號字, 黑�
 fontTail = Font(b=False, color='000000', size=14)  #
 alHVCenter = Alignment(horizontal="center", vertical="center")  # 水平垂直置中排列
 alHCenter = Alignment(horizontal="center", vertical="bottom")  # 水平置中排列
+alHleftVBottom = Alignment(horizontal="left", vertical="bottom")  # 水平置中排列
 noborder = Side(border_style="thin", color="FFFFFF")  # 沒有框
 redThickBorder = Side(border_style='thick', color='FF0000')  # 紅粗框
 blackThickBorder = Side(border_style='thick', color='000000')  # 黑粗框
@@ -104,12 +97,9 @@ for sheet in listSheets:
                 sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].border = borderReportCell
                 sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].alignment = alHCenter
     # 加表尾
-    numTailLineIdx = 2
-    for textLineInTail in strListTail:
-        numTailLineIdx += 1
-        sheet[f'A{numRowCount + numTailLineIdx}'] = textLineInTail
+    sheet[f'A{numRowCount + 3}'] = strTail
     #
-    style_range(sheet, f'A{numRowCount + 3}:{get_column_letter(numColCount)}{numRowCount + 3 + len(strListTail) - 1}', border=borderTail, fill='', font=fontTail, alignment='')
+    style_range(sheet, f'A{numRowCount + 3}:{get_column_letter(numColCount)}{numRowCount + 3 + 8}', border=borderTail, fill='', font=fontTail, alignment=alHleftVBottom)
 
 # 寫入excel檔案
 wbOutPut.save(filename = f'{strOutPutFileName}.xlsx')
