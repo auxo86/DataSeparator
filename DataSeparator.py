@@ -11,15 +11,14 @@ strHeadText = '2017 年 11月 請 款 單'  # input('請輸入表頭文字：')
 strOutPutFileName = strFileName + '_output'
 strTotalPriceColName = '總價'
 strListTail = [
-    [''],
-    ['PS:'],
-    ['一.資料若有錯誤，請立即通知歐美技工所'],
-    ['二.未寫技工單者,以收單日期填寫'],
-    ['三.9月份後請款單，以當月收單日期為主'],
-    ['四.107年1月部分產品調漲通知'],
-    ['五.新增請款單方式:郵寄，mail，line'],
-    ['		mail:k62718@gmail.com'],
-    ['		line ID:0953162482']]
+    'PS:',
+    '一.資料若有錯誤，請立即通知歐美技工所',
+    '二.未寫技工單者,以收單日期填寫',
+    '三.9月份後請款單，以當月收單日期為主',
+    '四.107年1月部分產品調漲通知',
+    '五.新增請款單方式:郵寄，mail，line',
+    '\t\tmail:k62718@gmail.com',
+    '\t\tline ID:0953162482']
 
 # 樣式
 fontHead = Font(b=True, color="000000", size=28)  # 粗體, 28號字, 黑色
@@ -102,10 +101,12 @@ for sheet in listSheets:
             else:
                 sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].border = borderReportCell
     # 加表尾
-    for textLine in strListTail:
-        sheet.append(textLine)
+    numTailLineIdx = 2
+    for textLineInTail in strListTail:
+        numTailLineIdx += 1
+        sheet[f'A{numRowCount + numTailLineIdx}'] = textLineInTail
     #
-    style_range(sheet, f'A{numRowCount + 3}:{get_column_letter(numColCount)}{numRowCount + 3 + len(strListTail) - 2}', border=borderTail, fill='', font=fontTail, alignment='')
+    style_range(sheet, f'A{numRowCount + 3}:{get_column_letter(numColCount)}{numRowCount + 3 + len(strListTail) - 1}', border=borderTail, fill='', font=fontTail, alignment='')
 
 # 寫入excel檔案
 wbOutPut.save(filename = f'{strOutPutFileName}.xlsx')
