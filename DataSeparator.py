@@ -50,6 +50,7 @@ for item in listDistinctCol:  # 給字典塞入值，這個數字要用在sheet�
     dictSheetIndex[item] = idx
     idx += 1
 
+# 判斷是哪間診所，分配到不同的sheet
 for numRowIdx in range(2, numRows + 1):
     row = list(sheet_ranges[f'A{numRowIdx}:{idxLastCol}{numRowIdx}'][0])  # 把列讀進來
     idxSheet = dictSheetIndex[sheet_ranges[f'{cellDistinctCol.column}{numRowIdx}'].value]  # 根據要distinct的目標欄位的值，找出要寫入的sheet index
