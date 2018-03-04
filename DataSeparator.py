@@ -10,14 +10,31 @@ strDistinctCol = '牙醫診所'  # input('請輸入要建立分頁所依據的�
 strHeadText = '2017 年 11月 請 款 單'  # input('請輸入表頭文字：')
 strOutPutFileName = strFileName + '_output'
 strTotalPriceColName = '總價'
+strListTail = [
+    [''],
+    ['PS:'],
+    ['一.資料若有錯誤，請立即通知歐美技工所'],
+    ['二.未寫技工單者,以收單日期填寫'],
+    ['三.9月份後請款單，以當月收單日期為主'],
+    ['四.107年1月部分產品調漲通知'],
+    ['五.新增請款單方式:郵寄，mail，line'],
+    ['		mail:k62718@gmail.com'],
+    ['		line ID:0953162482']]
+
 # 樣式
 fontHead = Font(b=True, color="000000", size=28)  # 粗體, 28號字, 黑色
 fontTotalPrice = Font(b=True, color='000000', size=14)  # 粗體, 14號字, 紅色
-al = Alignment(horizontal="center", vertical="center")  # 置中排列
+fontTail = Font(b=False, color='000000', size=14)  #
+alHVCenter = Alignment(horizontal="center", vertical="center")  # 水平垂直置中排列
 noborder = Side(border_style="thin", color="FFFFFF")  # 沒有框
-redBorder = Side(border_style='thick', color='FF0000')  # 紅粗框
+redThickBorder = Side(border_style='thick', color='FF0000')  # 紅粗框
+blackThickBorder = Side(border_style='thick', color='000000')  # 黑粗框
+grayThinBorder = Side(border_style='thin', color='969696')  # 灰細框
 borderHead = Border(top=noborder, left=noborder, right=noborder, bottom=noborder)
-borderTotalPrice = Border(top=redBorder, left=redBorder, right=redBorder, bottom=redBorder)
+borderColLists = Border(top=blackThickBorder, left=noborder, right=noborder, bottom=blackThickBorder)
+borderTotalPrice = Border(top=redThickBorder, left=redThickBorder, right=redThickBorder, bottom=redThickBorder)
+borderReportCell = Border(top=grayThinBorder, left=noborder, right=noborder, bottom=grayThinBorder)
+borderTail = Border(top=grayThinBorder, left=grayThinBorder, right=grayThinBorder, bottom=grayThinBorder)
 
 # 讀入檔案
 wb = load_workbook(filename=f'{strFileName}.xlsx')
@@ -52,7 +69,7 @@ listSheets = list(map(lambda x: wbOutPut.create_sheet(x, 0), listDistinctCol))  
 for sheet in listSheets:
     cellHead = sheet['A1']
     cellHead.value = strHeadText
-    style_range(sheet, f'A1:{idxLastCol}3', border=borderHead, fill='', font=fontHead, alignment=al)
+    style_range(sheet, f'A1:{idxLastCol}3', border=borderHead, fill='', font=fontHead, alignment=alHVCenter)
     sheet.append(listColNames)
 
 # 讀取每一列，根據strDistinctCol的值把列塞到不同的sheet
@@ -69,13 +86,26 @@ for numRowIdx in range(2, numRows + 1):
     row = list(map(lambda x: x.value, row))  # 把列的所有cell的值取出來重組成list
     listSheets[idxSheet].append(row)
 
-# 計算總價格
+# 計算總價格還有格線設定、表尾
 for sheet in listSheets:
     numRowCount = sheet.max_row
     numColCount = sheet.max_column
     sheet.cell(row = numRowCount + 1, column = sheet[f'{FirstCellInColTotalPrice.column}{numRowCount + 1}'].col_idx - 3, value = '總金額')  # 在某個格子中加入"總金額"三個字
-    style_range(sheet, f'{firstColInTotalPriceText}{numRowCount + 1}:{lastColInTotalPriceText}{numRowCount + 1}', border=borderTotalPrice, fill='', font=fontTotalPrice, alignment=al)
+    style_range(sheet, f'{firstColInTotalPriceText}{numRowCount + 1}:{lastColInTotalPriceText}{numRowCount + 1}', border=borderTotalPrice, fill='', font=fontTotalPrice, alignment=alHVCenter)
+    # 計算總價格
     sheet[f'{FirstCellInColTotalPrice.column}{numRowCount + 1}'] = f'=SUM({FirstCellInColTotalPrice.column}4:{FirstCellInColTotalPrice.column}{numRowCount})'  # 把總價加總一下
+    # 畫格線，要一格格畫
+    for numRowIdx in range(4, numRowCount + 1):
+        for numColIdx in range(1,numColCount + 1):
+            if numRowIdx == 4:
+                sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].border = borderColLists
+            else:
+                sheet[f'{get_column_letter(numColIdx)}{numRowIdx}'].border = borderReportCell
+    # 加表尾
+    for textLine in strListTail:
+        sheet.append(textLine)
+    #
+    style_range(sheet, f'A{numRowCount + 3}:{get_column_letter(numColCount)}{numRowCount + 3 + len(strListTail) - 2}', border=borderTail, fill='', font=fontTail, alignment='')
 
 # 寫入excel檔案
 wbOutPut.save(filename = f'{strOutPutFileName}.xlsx')
