@@ -3,9 +3,9 @@ from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Align
 from style import style_range
 
 # 參數設定區
-strFileName = '八月銷售表'  # input('請輸入檔案名稱：')
+strFileName = '11月工作表'  # input('請輸入檔案名稱：')
 strDistinctCol = '牙醫診所'  # input('請輸入要建立分頁所依據的欄位名稱：')
-strHeadText = '2017 年 8月 請 款 單'  # input('請輸入表頭文字：')
+strHeadText = '2017 年 11月 請 款 單'  # input('請輸入表頭文字：')
 strOutPutFileName = strFileName + '_output'
 
 # 讀入檔案
@@ -17,6 +17,7 @@ listCols = list(sheet_ranges['1']) # 載入欄位列
 listCols = list(filter(lambda x: x.value is not None, listCols))  # 去掉值為None的cell
 idxLastCol = listCols[len(listCols)-1].column  # 找到最後一個欄位的英文index
 cellDistinctCol = list(filter(lambda x: x.value == strDistinctCol, listCols))[0]  # 找到要distinct的欄位是在那一格
+listCols = list(map(lambda x: x.value, listCols))
 
 # 讀入要distinct的col
 listDistinctCol = sheet_ranges[cellDistinctCol.column]
@@ -40,6 +41,7 @@ for sheet in listSheets:
     cellHead = sheet['A1']
     cellHead.value = strHeadText
     style_range(sheet, f'A1:{idxLastCol}3', border=border, fill='', font=font, alignment=al)
+    sheet.append(listCols)
 
 # 讀取每一列，根據strDistinctCol的值把列塞到不同的sheet
 dictSheetIndex = {}  # 建立sheet字典
